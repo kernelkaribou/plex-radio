@@ -1,0 +1,9 @@
+plex:
+  host: "YourLocalPlexAddress (traditionally IP and Port)"
+  token: "YourPlexToken"
+
+channels:
+  - name: "Jazz Radio"
+    playlist: "Jazz Radio"
+  - name: "Rock Radio"
+    playlist: "Rock Radio"

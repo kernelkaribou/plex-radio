@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  plex-radio-api:
+    build: .
+    container_name: plex-radio-api
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount configuration directory to allow easy config updates
+      - ./server/configuration:/app/server/configuration:ro
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - plex-radio-network
+
+networks:
+  plex-radio-network:
+    driver: bridge
