@@ -24,9 +24,10 @@ def generate_daily_playlists():
     """
     Generate daily playlists for each channel based on the current playlist.
     """
+    channel_playlists.clear()  # Clear existing playlists
+
     for channel in current_config.get_channels():
-        current_playlist = plex.playlist(channel['playlist'])
-        daily_playlist_instance = daily_playlist.DailyPlaylist(current_playlist)
+        daily_playlist_instance = daily_playlist.DailyPlaylist(plex, channel['playlist'])
         channel_playlists.append(daily_playlist_instance)
 
 def calculate_current_song_info(channel_number=0):
@@ -34,6 +35,10 @@ def calculate_current_song_info(channel_number=0):
     Calculate the current song that should be playing based on time of day
     and return its information including title, start time, and media link
     """
+    
+    # Added extra process to refresh the playlist if needed, this can cause initial slow load though
+    channel_playlists[channel_number].refresh_if_needed()
+    
     try:
         # Find the specified playlist
         target_playlist = channel_playlists[channel_number] if channel_number < len(channel_playlists) else None
