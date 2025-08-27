@@ -3,6 +3,7 @@ from plexapi.server import PlexServer
 import datetime
 import config
 import daily_playlist
+from unidecode import unidecode
 import os
 
 app = Flask(__name__)
@@ -60,12 +61,12 @@ def calculate_current_song_info(channel_number=0):
                 start_time_in_item = playlist_start_time - cumulative_time
                 
                 song_info = {
-                    "title": item.title,
+                    "title": unidecode(item.title),
                     "start_time": round(start_time_in_item),
                     "media_link": f"{BASEURL}{item.media[0].parts[0].key}",
                     "duration": item_duration,
-                    "artist": getattr(item, 'grandparentTitle', 'Unknown') if hasattr(item, 'grandparentTitle') else 'Unknown',
-                    "album": getattr(item, 'parentTitle', 'Unknown') if hasattr(item, 'parentTitle') else 'Unknown'
+                    "artist": unidecode(getattr(item, 'grandparentTitle', 'Unknown')) if hasattr(item, 'grandparentTitle') else 'Unknown',
+                    "album": unidecode(getattr(item, 'parentTitle', 'Unknown')) if hasattr(item, 'parentTitle') else 'Unknown'
                 }
 
                 next_song_index = index + 1 if index+1 < len(target_playlist.playlist_items) else 0
@@ -73,12 +74,12 @@ def calculate_current_song_info(channel_number=0):
                 next_item = target_playlist.playlist_items[next_song_index]
 
                 next_song_info = {
-                    "title": next_item.title,
+                    "title": unidecode(next_item.title),
                     "start_time": 0,
                     "media_link": f"{BASEURL}{next_item.media[0].parts[0].key}",
                     "duration": next_item.duration/1000,
-                    "artist": getattr(next_item, 'grandparentTitle', 'Unknown') if hasattr(next_item, 'grandparentTitle') else 'Unknown',
-                    "album": getattr(next_item, 'parentTitle', 'Unknown') if hasattr(next_item, 'parentTitle') else 'Unknown'
+                    "artist": unidecode(getattr(next_item, 'grandparentTitle', 'Unknown')) if hasattr(next_item, 'grandparentTitle') else 'Unknown',
+                    "album": unidecode(getattr(next_item, 'parentTitle', 'Unknown')) if hasattr(next_item, 'parentTitle') else 'Unknown'
                 }
 
                 song_info["next_song"] = next_song_info
