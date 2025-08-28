@@ -30,6 +30,22 @@ def generate_daily_playlists():
         daily_playlist_instance = daily_playlist.DailyPlaylist(plex, channel['playlist'])
         channel_playlists.append(daily_playlist_instance)
 
+def initialize_app():
+    """Initialize the application - called when the module is imported"""
+    print("Starting Plex Radio API...")
+    print("Available endpoints:")
+    print("  GET /current-song - Get current song from default playlist")
+    print("  GET /current-song/<channel_number> - Get current song from specific channel")
+    print("  GET /channels - List all available channels")
+    print("  GET /health - Health check")
+
+    print("Generating daily playlists...")
+    generate_daily_playlists()
+    print("Plex Radio API initialized successfully!")
+
+# Initialize when the module is imported (for Gunicorn)
+initialize_app()
+
 def calculate_current_song_info(channel_number=0):
     """
     Calculate the current song that should be playing based on time of day
@@ -184,17 +200,5 @@ def not_found(error):
 def internal_error(error):
     return jsonify({"error": "Internal server error"}), 500
 
-if __name__ == '__main__':
-    print("Starting Plex Radio API...")
-    print("Available endpoints:")
-    print("  GET /current-song - Get current song from default playlist")
-    print("  GET /current-song/<channel_number> - Get current song from specific channel")
-    print("  GET /channels - List all available channels")
-    print("  GET /health - Health check")
-
-    print("Generating daily playlists...")
-    generate_daily_playlists()
-
-    print("\nStarting server on http://localhost:5000")
-    
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == '__main__':    
+    app.run(debug=True, host='0.0.0.0', port=5000)

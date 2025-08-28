@@ -52,3 +52,5 @@ README.md
 # Temporary files
 *.tmp
 *.temp
+
+plex_radio_config.yaml
