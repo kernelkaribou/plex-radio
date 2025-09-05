@@ -176,7 +176,7 @@ channels:
     playlist: "Rock Classics"
     playback: "sequential"            # Play songs in playlist order
   - name: "Pop Radio"                 # playback field is optional
-    playlist: "Pop Hits"              # Defaults to "shuffle" if not specified
+    playlist: "Pop Hits"              # Defaults to "shuffle" if playback not specified
 ```
 
 ### Playback Modes
